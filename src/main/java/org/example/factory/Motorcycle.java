@@ -44,47 +44,41 @@ public class Motorcycle implements Transport {
     }
 
     public String[] getAllModelNames() {
-        if (getSize() == 0) {
+        int size = getSize();
+        if (size == 0) {
             return new String[0];
         }
-        String[] allNames = new String[getSize()];
+
+        String[] modelNames = new String[size];
         Model cModel = head.next;
         int i = 0;
         while (!cModel.equals(head)) {
-            allNames[i] = cModel.getName();
+            modelNames[i] = cModel.getName();
             cModel = cModel.next;
             i++;
         }
-        return allNames;
+        return modelNames;
     }
 
     public int[] getAllModelPrices() {
-        int[] allPrices = new int[getSize()];
+        int[] modelPrices = new int[getSize()];
         Model cModel = head.next;
         int i = 0;
         while (!cModel.equals(head)) {
-            allPrices[i] = cModel.getPrice();
+            modelPrices[i] = cModel.getPrice();
             cModel = cModel.next;
             i++;
         }
-        return allPrices;
-    }
-
-    public void setModelPriceByName(String name, int price) throws NoSuchModelNameException {
-        getModelByName(name).setPrice(price);
-    }
-
-    public void setModelNameByOldName(String oldName, String newName)
-            throws NoSuchModelNameException, DuplicateModelNameException {
-        if (isContainModel(newName)) {
-            throw new DuplicateModelNameException(newName);
-        }
-        getModelByName(oldName).setName(newName);
+        return modelPrices;
     }
 
     public double getModelPriceByName(String name) throws NoSuchModelNameException {
         Model model = getModelByName(name);
         return model.getPrice();
+    }
+
+    public void setModelPriceByName(String name, int price) throws NoSuchModelNameException {
+        getModelByName(name).setPrice(price);
     }
 
     public void addModel(String name, int price) throws DuplicateModelNameException {
@@ -120,17 +114,6 @@ public class Motorcycle implements Transport {
         head.prev = newModel;
     }
 
-    public Model getLastModel() throws NoSuchModelNameException {
-        Model cModel = head.next;
-        while (!cModel.equals(head)) {
-            if (cModel.next.equals(head)) {
-                return cModel;
-            }
-            cModel = cModel.next;
-        }
-        throw new NoSuchModelNameException("");
-    }
-
     public void deleteModel(String name) throws NoSuchModelNameException {
         Model modelToDelete = getModelByName(name);
         Model nextModel = modelToDelete.next;
@@ -151,6 +134,14 @@ public class Motorcycle implements Transport {
         throw new NoSuchModelNameException(name);
     }
 
+    public void setModelNameByOldName(String oldName, String newName)
+            throws NoSuchModelNameException, DuplicateModelNameException {
+        if (isContainModel(newName)) {
+            throw new DuplicateModelNameException(newName);
+        }
+        getModelByName(oldName).setName(newName);
+    }
+
     private boolean isContainModel(String name) {
         for (String modelName : getAllModelNames()) {
             if (modelName != null && modelName.equals(name)) {
@@ -160,13 +151,24 @@ public class Motorcycle implements Transport {
         return false;
     }
 
+    private Model getLastModel() throws NoSuchModelNameException {
+        Model cModel = head.next;
+        while (!cModel.equals(head)) {
+            if (cModel.next.equals(head)) {
+                return cModel;
+            }
+            cModel = cModel.next;
+        }
+        throw new NoSuchModelNameException("");
+    }
+
     @Data
     @NoArgsConstructor
     public static class Model {
         private String name;
         private int price;
-        public Model prev = null;
-        public Model next = null;
+        private Model prev;
+        private Model next;
 
         public Model(String name, int price) {
             if (price < 0) {
@@ -174,6 +176,8 @@ public class Motorcycle implements Transport {
             }
             this.name = name;
             this.price = price;
+            this.prev = null;
+            this.next = null;
         }
 
         public void setPrice(int price) throws ModelPriceOutOfBoundsException{

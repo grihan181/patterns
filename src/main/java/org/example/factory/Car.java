@@ -36,15 +36,6 @@ public class Car implements Transport {
                 .findFirst().orElseThrow(() -> new NoSuchModelNameException(modelName));
     }
 
-    private boolean isContainModel(String modelName) {
-        try{
-            getModelByName(modelName);
-        } catch (NoSuchModelNameException e) {
-            return false;
-        }
-        return true;
-    }
-
     public String[] getAllModelNames() {
         int size = getSize();
         if (size == 0) {
@@ -83,7 +74,8 @@ public class Car implements Transport {
     public void addModel(String name, int price) throws DuplicateModelNameException, ModelPriceOutOfBoundsException {
         if (price < 0) {
             throw new ModelPriceOutOfBoundsException(price);
-        } else if (isContainModel(name)) {
+        }
+        if (isContainModel(name)) {
             throw new DuplicateModelNameException(name);
         }
 
@@ -117,6 +109,15 @@ public class Car implements Transport {
         } else {
             newModel.setName(newName);
         }
+    }
+
+    private boolean isContainModel(String modelName) {
+        try{
+            getModelByName(modelName);
+        } catch (NoSuchModelNameException e) {
+            return false;
+        }
+        return true;
     }
 
     @Data
