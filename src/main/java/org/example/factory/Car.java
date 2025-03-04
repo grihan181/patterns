@@ -9,7 +9,7 @@ import org.example.factory.exception.NoSuchModelNameException;
 import java.util.Arrays;
 
 @Data
-public class Car {
+public class Car implements Transport {
     private String brand;
     private Model[] models;
 
@@ -125,7 +125,7 @@ public class Car {
         private String name;
         private int price;
 
-        public void setPrice(int price) {
+        public void setPrice(int price) throws ModelPriceOutOfBoundsException{
             if (price < 0) {
                 throw new ModelPriceOutOfBoundsException(price);
             }
