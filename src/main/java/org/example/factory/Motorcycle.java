@@ -6,8 +6,10 @@ import org.example.factory.exception.DuplicateModelNameException;
 import org.example.factory.exception.ModelPriceOutOfBoundsException;
 import org.example.factory.exception.NoSuchModelNameException;
 
-public class Motorcycle implements Transport {
+@Data
+public class Motorcycle implements Transport  {
     private String brand;
+    private int size = 0;
     private Model head = new Model("Head", 0);
     {
         head.prev = head;
@@ -19,28 +21,11 @@ public class Motorcycle implements Transport {
             throw new RuntimeException("Количество моделей не может быть меньше 0!");
         }
         this.brand = brand;
+        this.size = 0;
 
         for (int i = 0; i < size; i++) {
-            addModel(null, i * 10);
+            addModel(null, 0);
         }
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public int getSize() {
-        int size = 0;
-        Model cModel = head.next;
-        while (!cModel.equals(head)) {
-            size++;
-            cModel = cModel.next;
-        }
-        return size;
     }
 
     public String[] getAllModelNames() {
@@ -89,6 +74,7 @@ public class Motorcycle implements Transport {
             throw new DuplicateModelNameException(name);
         }
 
+        ++size;
         if (head.prev.name == null && name != null) {
             Model cModel = head.next;
             while (!cModel.equals(head)) {
@@ -120,6 +106,7 @@ public class Motorcycle implements Transport {
         Model prevModel = modelToDelete.prev;
         nextModel.prev = prevModel;
         prevModel.next = nextModel;
+        --size;
     }
 
 
@@ -136,10 +123,23 @@ public class Motorcycle implements Transport {
 
     public void setModelNameByOldName(String oldName, String newName)
             throws NoSuchModelNameException, DuplicateModelNameException {
-        if (isContainModel(newName)) {
-            throw new DuplicateModelNameException(newName);
+
+        Model newModel = null;
+        Model cModel = head.next;
+        while (!cModel.equals(head)) {
+            if (cModel.getName().equals(newName)) {
+                throw new DuplicateModelNameException(newName);
+            } else if(cModel.getName().equals(oldName)) {
+                newModel = cModel;
+            }
+            cModel = cModel.next;
         }
-        getModelByName(oldName).setName(newName);
+
+        if (newModel == null) {
+            throw new NoSuchModelNameException(oldName);
+        } else {
+            newModel.setName(newName);
+        }
     }
 
     private boolean isContainModel(String name) {
@@ -162,13 +162,38 @@ public class Motorcycle implements Transport {
         throw new NoSuchModelNameException("");
     }
 
+    @Override
+    public Motorcycle clone() throws CloneNotSupportedException {
+        Motorcycle motorcycleClone = (Motorcycle) super.clone();
+        motorcycleClone.head = new Model("Head", 0);
+        Model cModel = this.head.next;
+        Model cloned = motorcycleClone.head;
+        while (!cModel.equals(this.head)) {
+            cloned.next = cModel.clone();
+            cloned.next.prev = cloned;
+            cloned = cloned.next;
+            cModel = cModel.next;
+        }
+        motorcycleClone.head.prev = cloned;
+        cloned.next = motorcycleClone.head;
+        return motorcycleClone;
+    }
+
     @Data
     @NoArgsConstructor
-    public static class Model {
+    public static class Model implements Cloneable{
         private String name;
         private int price;
         private Model prev;
         private Model next;
+
+        @Override
+        public Model clone() throws CloneNotSupportedException {
+            Model modelClone = (Model) super.clone();
+            modelClone.setName(name);
+            modelClone.setPrice(price);
+            return modelClone;
+        }
 
         public Model(String name, int price) {
             if (price < 0) {

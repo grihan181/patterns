@@ -15,7 +15,7 @@ public class AppConfig {
         try (FileInputStream inputStream = new FileInputStream(CONFIG_FILE)) {
             properties.load(inputStream);
         } catch (IOException e) {
-            System.err.println("Ошибка при загрузке файла конфигурации: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
