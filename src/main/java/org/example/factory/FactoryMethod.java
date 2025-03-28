@@ -1,115 +1,106 @@
 package org.example.factory;
 
+import org.example.factory.exception.DuplicateModelNameException;
+import org.example.factory.exception.NoSuchModelNameException;
+import org.example.factory.service.impl.Car;
+import org.example.factory.service.impl.CarFactory;
+import org.example.factory.service.impl.Motorcycle;
+import org.example.factory.service.impl.MotorcycleFactory;
+import org.example.factory.util.TransportUtility;
+
 public class FactoryMethod {
     public static void main(String[] args) throws Exception {
-        int initialModelsCount = 5;
+        int initialModelsCount = 3;
+        testCar(initialModelsCount);
+        testMotorcycle(initialModelsCount);
+        testFactory(initialModelsCount);
+    }
 
-        Car car = new Car("Бренд Бибика", initialModelsCount);
-        TransportUtility.printAllModels(car);
-        delimeter();
+    private static void testFactory(int initialModelsCount) throws DuplicateModelNameException {
+        System.out.println("Factory: ");
+        CarFactory carFactory = CarFactory.getInstance();
+        Car newCar = carFactory.createInstance("Car", initialModelsCount);
+        System.out.printf("%s size = %s\n", newCar.getBrand(), newCar.getSize());
+
+        MotorcycleFactory motorcycleFactory = MotorcycleFactory.getInstance();
+        Motorcycle newMotorcycle = motorcycleFactory.createInstance("Motorcycle", initialModelsCount);
+        System.out.printf("%s size = %s\n", newMotorcycle.getBrand(), newMotorcycle.getSize());
+        TransportUtility.printAllModels(newMotorcycle);
+
+        System.out.println("TransportUtility: ");
+        TransportUtility.setTransportFactory(carFactory);
+        Transport newTransport = TransportUtility.createInstance("Car", initialModelsCount);
+        System.out.printf("%s size = %s\n", newTransport.getBrand(), newTransport.getSize());
+
+        TransportUtility.setTransportFactory(motorcycleFactory);
+        Transport newTransport2 = TransportUtility.createInstance("Motorcycle", initialModelsCount);
+        System.out.printf("%s size = %s\n", newTransport2.getBrand(), newTransport2.getSize());
+        TransportUtility.printAllModels(newTransport2);
+    }
+
+    private static void testMotorcycle(int initialModelsCount) throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
+        Motorcycle motorcycle = new Motorcycle("Yamaha", initialModelsCount);
+
+        for (int i = 0; i < initialModelsCount + 1; i++) {
+            motorcycle.addModel("Motorcycle " + (i + 1), (i + 1) * 10);
+        }
+
+        System.out.println("Brand: " + motorcycle.getBrand());
+        TransportUtility.printAllModels(motorcycle);
+
+        motorcycle.deleteModel("Motorcycle 2");
+        System.out.println("Delete 'Motorcycle 2'");
+        TransportUtility.printAllModels(motorcycle);
+
+        motorcycle.addModel("Motorcycle 2", 20);
+        System.out.println("Add 'Motorcycle 2'");
+        TransportUtility.printAllModels(motorcycle);
+
+        motorcycle.setModelNameByOldName("Motorcycle 2", "Motorcycle 5");
+        System.out.println("'Motorcycle 2' -> 'Motorcycle 5'");
+        TransportUtility.printAllModels(motorcycle);
+
+        System.out.println("Clone");
+        Motorcycle cloneMotorcycle = motorcycle.clone();
+        System.out.println("CLone model: ");
+        TransportUtility.printAllModels(cloneMotorcycle);
+        cloneMotorcycle.setModelNameByOldName("Motorcycle 5", "Motorcycle Motorcycle");
+        System.out.println("Original model: ");
+        TransportUtility.printAllModels(motorcycle);
+    }
+
+    private static void testCar(int initialModelsCount) throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
+        Car car = new Car("Lada", initialModelsCount);
         for (int i = 0; i < initialModelsCount + 1; i++) {
             car.addModel("Car " + (i + 1), (i + 1) * 10);
         }
 
-        System.out.println("Модели " + car.getBrand());
+        System.out.println("Brand:  " + car.getBrand());
         TransportUtility.printAllModels(car);
-        delimeter();
 
-        System.out.println("Средний прайс " + TransportUtility.averagePrice(car));
-        delimeter();
+        System.out.println("Avg price: " + TransportUtility.averagePrice(car));
 
         car.deleteModel("Car 2");
-
-        System.out.println("Одна из машинок потерялась");
+        System.out.println("Delete 'Car 2'");
         TransportUtility.printAllModels(car);
-        delimeter();
 
-        car.addModel("Car 2", 10);
+        car.addModel("Car 2", 20);
 
-        System.out.println("Возвращаем потерянную машинку");
+        System.out.println("Add 'Car 2'");
         TransportUtility.printAllModels(car);
-        delimeter();
 
-        car.setModelNameByOldName("Car 2", "Car 7");
+        car.setModelNameByOldName("Car 2", "Car 5");
 
-        System.out.println("После переименования Бибики");
+        System.out.println("'Car 2' -> 'Car 5'");
         TransportUtility.printAllModels(car);
-        delimeter();
 
-        System.out.println("Тесты клонирования");
+        System.out.println("Clone");
         Car cloneCar = car.clone();
-        System.out.println("Модели из клонированной Бибики");
+        System.out.println("CLone model: ");
         TransportUtility.printAllModels(cloneCar);
-        cloneCar.setModelNameByOldName("Car 7", "ИЗМЕНЕН");
-        System.out.println("Модели из оригинальной машины");
+        cloneCar.setModelNameByOldName("Car 5", "Car Car");
+        System.out.println("Original model: ");
         TransportUtility.printAllModels(car);
-        delimeter();
-
-        Motorcycle motorcycle = new Motorcycle("Бренд Вжух Вжуха", initialModelsCount);
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        for (int i = 0; i < initialModelsCount + 2; i++) {
-            motorcycle.addModel("Motorcycle " + (i + 1), (i + 1) * 10);
-        }
-
-        System.out.println("Модели " + motorcycle.getBrand());
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        motorcycle.deleteModel("Motorcycle 2");
-        System.out.println("Один из мотиков потерялся");
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        motorcycle.addModel("Motorcycle 2", 10);
-        System.out.println("Потерявшийся мотик нашелся");
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        motorcycle.setModelNameByOldName("Motorcycle 2", "Motorcycle 8");
-        System.out.println("После переименования Вжух Вжуха");
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        System.out.println("Тест клонирования");
-        Motorcycle cloneMotorcycle = motorcycle.clone();
-        System.out.println("Модели из клонированного Вжух Вжуха");
-        TransportUtility.printAllModels(cloneMotorcycle);
-        cloneMotorcycle.setModelNameByOldName("Motorcycle 8", "ИЗМЕНЕН");
-        System.out.println("Модели из оригинальной мотоцикл");
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-        
-        System.out.println("Оригинальный лист");
-        TransportUtility.printAllModels(motorcycle);
-        delimeter();
-
-        System.out.println("Тесты фабрики");
-
-        CarFactory carFactory = CarFactory.getInstance();
-        Car newCar = carFactory.createInstance("Машинка из фабрики", initialModelsCount);
-        System.out.printf("%s с размером %s и %s", newCar.getBrand(), newCar.getSize(), newCar.getClass());
-
-        MotorcycleFactory motorcycleFactory = MotorcycleFactory.getInstance();
-        Motorcycle newMotorcycle = motorcycleFactory.createInstance("Мотоцикл из фабрики", initialModelsCount);
-        System.out.printf("%s с размером %s и и %s \n", newMotorcycle.getBrand(), newMotorcycle.getSize(), newMotorcycle.getClass());
-        TransportUtility.printAllModels(newMotorcycle);
-
-        delimeter();
-        System.out.println("Пробуем TransportUtility");
-
-        TransportUtility.setTransportFactory(carFactory);
-        Transport newTransport = TransportUtility.createInstance("Машинка из фабрики фабрик", initialModelsCount);
-        System.out.printf("%s с размером %s и %s", newTransport.getBrand(), newTransport.getSize(), newTransport);
-
-        TransportUtility.setTransportFactory(motorcycleFactory);
-        Transport newTransport2 = TransportUtility.createInstance("Мотоцикл из фабрики фабрик", initialModelsCount);
-        System.out.printf("%s с размером %s и \n", newTransport2.getBrand(), newTransport2.getSize());
-        TransportUtility.printAllModels(newTransport2);
     }
 
-    static void delimeter() {
-        System.out.println("-------------------------------");
-    }
 }

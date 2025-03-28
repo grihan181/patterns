@@ -1,16 +1,23 @@
-package org.example.factory;
+package org.example.factory.service.impl;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.factory.Transport;
 import org.example.factory.exception.DuplicateModelNameException;
 import org.example.factory.exception.ModelPriceOutOfBoundsException;
 import org.example.factory.exception.NoSuchModelNameException;
 
+import static org.example.constant.ExceptionMessageException.NEGATIVE_COUNT_MODEL;
+import static org.example.factory.util.TransportUtility.validateName;
+
 @Data
-public class Motorcycle implements Transport  {
+public class Motorcycle implements Transport {
+
+    private static final String HEAD = "Head";
+
     private String brand;
-    private int size = 0;
-    private Model head = new Model("Head", 0);
+    private int size;
+    private Model head = new Model(HEAD, 0);
     {
         head.prev = head;
         head.next = head;
@@ -18,8 +25,9 @@ public class Motorcycle implements Transport  {
 
     public Motorcycle(String brand, int size) throws DuplicateModelNameException {
         if (size < 0) {
-            throw new RuntimeException("Количество моделей не может быть меньше 0!");
+            throw new RuntimeException(NEGATIVE_COUNT_MODEL);
         }
+
         this.brand = brand;
         this.size = 0;
 
@@ -74,7 +82,6 @@ public class Motorcycle implements Transport  {
             throw new DuplicateModelNameException(name);
         }
 
-        ++size;
         if (head.prev.name == null && name != null) {
             Model cModel = head.next;
             while (!cModel.equals(head)) {
@@ -98,6 +105,7 @@ public class Motorcycle implements Transport  {
         }
         newModel.next = head;
         head.prev = newModel;
+        ++size;
     }
 
     public void deleteModel(String name) throws NoSuchModelNameException {
@@ -109,8 +117,9 @@ public class Motorcycle implements Transport  {
         --size;
     }
 
-
     public Model getModelByName(String name) throws NoSuchModelNameException {
+        validateName(name);
+
         Model cModel = head.next;
         while (!cModel.equals(head)) {
             if (cModel.getName().equals(name)) {
@@ -165,23 +174,27 @@ public class Motorcycle implements Transport  {
     @Override
     public Motorcycle clone() throws CloneNotSupportedException {
         Motorcycle motorcycleClone = (Motorcycle) super.clone();
-        motorcycleClone.head = new Model("Head", 0);
+        motorcycleClone.head = new Model(HEAD, 0);
         Model cModel = this.head.next;
         Model cloned = motorcycleClone.head;
+
         while (!cModel.equals(this.head)) {
             cloned.next = cModel.clone();
             cloned.next.prev = cloned;
             cloned = cloned.next;
             cModel = cModel.next;
         }
+
         motorcycleClone.head.prev = cloned;
         cloned.next = motorcycleClone.head;
+
         return motorcycleClone;
     }
 
     @Data
     @NoArgsConstructor
-    public static class Model implements Cloneable{
+    public static class Model implements Cloneable {
+
         private String name;
         private int price;
         private Model prev;
@@ -192,6 +205,7 @@ public class Motorcycle implements Transport  {
             Model modelClone = (Model) super.clone();
             modelClone.setName(name);
             modelClone.setPrice(price);
+
             return modelClone;
         }
 
@@ -199,6 +213,7 @@ public class Motorcycle implements Transport  {
             if (price < 0) {
                 throw new ModelPriceOutOfBoundsException(price);
             }
+
             this.name = name;
             this.price = price;
             this.prev = null;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class AppConfig {
+
     private static AppConfig instance;
     private Properties properties;
 
@@ -19,14 +20,18 @@ public class AppConfig {
         }
     }
 
-    public static synchronized AppConfig getInstance() {
+    public static AppConfig getInstance() {
         if (instance == null) {
-            instance = new AppConfig();
+            synchronized (AppConfig.class) {
+                if (instance == null) {
+                    instance = new AppConfig();
+                }
+            }
         }
         return instance;
     }
 
     public String getProperty(String key) {
-        return properties.getProperty(key);
+        return properties.getProperty(key, "");
     }
 }

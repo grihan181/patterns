@@ -1,8 +1,12 @@
-package org.example.factory;
+package org.example.factory.util;
 
-import lombok.Data;
 import lombok.experimental.UtilityClass;
+import org.example.factory.Transport;
+import org.example.factory.TransportFactory;
 import org.example.factory.exception.DuplicateModelNameException;
+import org.example.factory.service.impl.CarFactory;
+
+import static org.example.constant.ExceptionMessageException.EMPTY_NAME;
 
 @UtilityClass
 public class TransportUtility {
@@ -26,7 +30,7 @@ public class TransportUtility {
         String[] names = vehicle.getAllModelNames();
 
         for (int i = 0; i < names.length; i++) {
-            System.out.println("Модель: " + names[i] + " Цена: " + prices[i]);
+            System.out.println("Model: " + names[i] + " Price: " + prices[i]);
         }
     }
 
@@ -34,7 +38,7 @@ public class TransportUtility {
         String[] names = vehicle.getAllModelNames();
 
         for (int i = 0; i < names.length; i++) {
-            System.out.println("Модель: " + names[i]);
+            System.out.println("Model: " + names[i]);
         }
     }
 
@@ -42,7 +46,7 @@ public class TransportUtility {
         int[] prices = vehicle.getAllModelPrices();
 
         for (int i = 0; i < prices.length; i++) {
-            System.out.println("Цена: " + prices[i]);
+            System.out.println("Price: " + prices[i]);
         }
     }
 
@@ -52,6 +56,12 @@ public class TransportUtility {
 
     public Transport createInstance(String name, int size) throws DuplicateModelNameException {
         return TransportUtility.factory.createInstance(name, size);
+    }
+
+    public static void validateName(String modelName) {
+        if (modelName == null || modelName.isEmpty()) {
+            throw new RuntimeException(EMPTY_NAME);
+        }
     }
 }
 
