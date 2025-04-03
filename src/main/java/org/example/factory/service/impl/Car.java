@@ -3,13 +3,13 @@ package org.example.factory.service.impl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.example.factory.Transport;
-import org.example.factory.exception.DuplicateModelNameException;
-import org.example.factory.exception.ModelPriceOutOfBoundsException;
-import org.example.factory.exception.NoSuchModelNameException;
+import org.example.exception.DuplicateModelNameException;
+import org.example.exception.ModelPriceOutOfBoundsException;
+import org.example.exception.NoSuchModelNameException;
 
 import java.util.Arrays;
 
-import static org.example.constant.ExceptionMessageException.NEGATIVE_COUNT_MODEL;
+import static org.example.constant.ExceptionMessageConst.NEGATIVE_COUNT_MODEL;
 import static org.example.factory.util.TransportUtility.validateName;
 
 @Data
@@ -115,10 +115,6 @@ public class Car implements Transport {
 
     public void setModelNameByOldName(String oldName, String newName)
             throws NoSuchModelNameException, DuplicateModelNameException {
-        if (isContainModel(newName)) {
-            throw new DuplicateModelNameException(newName);
-        }
-
         Model newModel = null;
         for (int i = 0; i < getSize(); i++) {
             if (models[i].getName().equals(newName)) {

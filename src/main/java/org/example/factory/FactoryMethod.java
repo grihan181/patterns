@@ -1,47 +1,48 @@
 package org.example.factory;
 
-import org.example.factory.exception.DuplicateModelNameException;
-import org.example.factory.exception.NoSuchModelNameException;
+import org.example.exception.DuplicateModelNameException;
+import org.example.exception.NoSuchModelNameException;
 import org.example.factory.service.impl.Car;
 import org.example.factory.service.impl.CarFactory;
 import org.example.factory.service.impl.Motorcycle;
 import org.example.factory.service.impl.MotorcycleFactory;
 import org.example.factory.util.TransportUtility;
 
+import static org.example.constant.PatternsConst.INIT_MODEL_COUNT;
+
 public class FactoryMethod {
     public static void main(String[] args) throws Exception {
-        int initialModelsCount = 3;
-        testCar(initialModelsCount);
-        testMotorcycle(initialModelsCount);
-        testFactory(initialModelsCount);
+        testCar();
+        testMotorcycle();
+        testFactory();
     }
 
-    private static void testFactory(int initialModelsCount) throws DuplicateModelNameException {
+    private static void testFactory() throws DuplicateModelNameException {
         System.out.println("Factory: ");
         CarFactory carFactory = CarFactory.getInstance();
-        Car newCar = carFactory.createInstance("Car", initialModelsCount);
+        Car newCar = carFactory.createInstance("Car", INIT_MODEL_COUNT);
         System.out.printf("%s size = %s\n", newCar.getBrand(), newCar.getSize());
 
         MotorcycleFactory motorcycleFactory = MotorcycleFactory.getInstance();
-        Motorcycle newMotorcycle = motorcycleFactory.createInstance("Motorcycle", initialModelsCount);
+        Motorcycle newMotorcycle = motorcycleFactory.createInstance("Motorcycle", INIT_MODEL_COUNT);
         System.out.printf("%s size = %s\n", newMotorcycle.getBrand(), newMotorcycle.getSize());
         TransportUtility.printAllModels(newMotorcycle);
 
         System.out.println("TransportUtility: ");
         TransportUtility.setTransportFactory(carFactory);
-        Transport newTransport = TransportUtility.createInstance("Car", initialModelsCount);
+        Transport newTransport = TransportUtility.createInstance("Car", INIT_MODEL_COUNT);
         System.out.printf("%s size = %s\n", newTransport.getBrand(), newTransport.getSize());
 
         TransportUtility.setTransportFactory(motorcycleFactory);
-        Transport newTransport2 = TransportUtility.createInstance("Motorcycle", initialModelsCount);
+        Transport newTransport2 = TransportUtility.createInstance("Motorcycle", INIT_MODEL_COUNT);
         System.out.printf("%s size = %s\n", newTransport2.getBrand(), newTransport2.getSize());
         TransportUtility.printAllModels(newTransport2);
     }
 
-    private static void testMotorcycle(int initialModelsCount) throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
-        Motorcycle motorcycle = new Motorcycle("Yamaha", initialModelsCount);
+    private static void testMotorcycle() throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
+        Motorcycle motorcycle = new Motorcycle("Yamaha", INIT_MODEL_COUNT);
 
-        for (int i = 0; i < initialModelsCount + 1; i++) {
+        for (int i = 0; i < INIT_MODEL_COUNT + 1; i++) {
             motorcycle.addModel("Motorcycle " + (i + 1), (i + 1) * 10);
         }
 
@@ -69,9 +70,9 @@ public class FactoryMethod {
         TransportUtility.printAllModels(motorcycle);
     }
 
-    private static void testCar(int initialModelsCount) throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
-        Car car = new Car("Lada", initialModelsCount);
-        for (int i = 0; i < initialModelsCount + 1; i++) {
+    private static void testCar() throws DuplicateModelNameException, NoSuchModelNameException, CloneNotSupportedException {
+        Car car = new Car("Lada", INIT_MODEL_COUNT);
+        for (int i = 0; i < INIT_MODEL_COUNT + 1; i++) {
             car.addModel("Car " + (i + 1), (i + 1) * 10);
         }
 

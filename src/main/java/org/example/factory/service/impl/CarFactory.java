@@ -1,7 +1,7 @@
 package org.example.factory.service.impl;
 
 import org.example.factory.TransportFactory;
-import org.example.factory.exception.DuplicateModelNameException;
+import org.example.exception.DuplicateModelNameException;
 
 public class CarFactory  implements TransportFactory {
 

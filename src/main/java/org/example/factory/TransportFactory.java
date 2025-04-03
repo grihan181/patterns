@@ -1,6 +1,6 @@
 package org.example.factory;
 
-import org.example.factory.exception.DuplicateModelNameException;
+import org.example.exception.DuplicateModelNameException;
 
 public interface TransportFactory {
 

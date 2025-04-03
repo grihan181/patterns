@@ -1,8 +1,8 @@
-package org.example.factory.exception;
+package org.example.exception;
 
 import java.text.MessageFormat;
 
-import static org.example.constant.ExceptionMessageException.ALREADY_MODEL_NAME;
+import static org.example.constant.ExceptionMessageConst.ALREADY_MODEL_NAME;
 
 public class DuplicateModelNameException extends Exception {
 

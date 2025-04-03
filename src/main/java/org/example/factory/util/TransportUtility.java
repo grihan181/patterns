@@ -3,10 +3,11 @@ package org.example.factory.util;
 import lombok.experimental.UtilityClass;
 import org.example.factory.Transport;
 import org.example.factory.TransportFactory;
-import org.example.factory.exception.DuplicateModelNameException;
+import org.example.exception.DuplicateModelNameException;
 import org.example.factory.service.impl.CarFactory;
+import org.example.factory.service.impl.SynchronizedTransport;
 
-import static org.example.constant.ExceptionMessageException.EMPTY_NAME;
+import static org.example.constant.ExceptionMessageConst.EMPTY_NAME;
 
 @UtilityClass
 public class TransportUtility {
@@ -62,6 +63,10 @@ public class TransportUtility {
         if (modelName == null || modelName.isEmpty()) {
             throw new RuntimeException(EMPTY_NAME);
         }
+    }
+
+    public static Transport synchronizedVehicle(Transport t) {
+        return new SynchronizedTransport(t);
     }
 }
 

@@ -1,8 +1,7 @@
 package org.example.factory;
 
-import org.example.factory.exception.DuplicateModelNameException;
-import org.example.factory.exception.ModelPriceOutOfBoundsException;
-import org.example.factory.exception.NoSuchModelNameException;
+import org.example.exception.DuplicateModelNameException;
+import org.example.exception.NoSuchModelNameException;
 
 public interface Transport extends Cloneable {
 

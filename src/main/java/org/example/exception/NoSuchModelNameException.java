@@ -1,8 +1,8 @@
-package org.example.factory.exception;
+package org.example.exception;
 
 import java.text.MessageFormat;
 
-import static org.example.constant.ExceptionMessageException.MODEL_NAME_NOT_FOUND;
+import static org.example.constant.ExceptionMessageConst.MODEL_NAME_NOT_FOUND;
 
 public class NoSuchModelNameException extends Exception {
 
