@@ -6,8 +6,10 @@ import org.example.factory.exception.DuplicateModelNameException;
 import org.example.factory.exception.ModelPriceOutOfBoundsException;
 import org.example.factory.exception.NoSuchModelNameException;
 
+import java.io.Serializable;
+
 @Data
-public class Motorcycle implements Transport  {
+public class Motorcycle implements Transport, Serializable {
     private String brand;
     private int size = 0;
     private Model head = new Model("Head", 0);
@@ -181,7 +183,7 @@ public class Motorcycle implements Transport  {
 
     @Data
     @NoArgsConstructor
-    public static class Model implements Cloneable{
+    public static class Model implements Cloneable, Serializable {
         private String name;
         private int price;
         private Model prev;

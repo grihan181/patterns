@@ -53,5 +53,9 @@ public class TransportUtility {
     public Transport createInstance(String name, int size) throws DuplicateModelNameException {
         return TransportUtility.factory.createInstance(name, size);
     }
+
+    public static Transport synchronizedVehicle(Transport transport) {
+        return new SynchronizedTransport(transport);
+    }
 }
 

@@ -6,11 +6,12 @@ import org.example.factory.exception.DuplicateModelNameException;
 import org.example.factory.exception.ModelPriceOutOfBoundsException;
 import org.example.factory.exception.NoSuchModelNameException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
 @Data
-public class Car implements Transport {
+public class Car implements Transport, Serializable {
     private String brand;
     private Model[] models;
 
@@ -153,7 +154,7 @@ public class Car implements Transport {
 
     @Data
     @AllArgsConstructor
-    public static class Model implements Cloneable {
+    public static class Model implements Cloneable, Serializable {
         private String name;
         private int price;
 

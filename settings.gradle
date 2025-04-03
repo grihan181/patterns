@@ -1,2 +1,4 @@
 rootProject.name = 'patterns'
+include 'client'
+include 'mvc'
 

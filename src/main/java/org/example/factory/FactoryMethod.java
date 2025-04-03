@@ -109,7 +109,7 @@ public class FactoryMethod {
         TransportUtility.printAllModels(newTransport2);
     }
 
-    static void delimeter() {
+    public static void delimeter() {
         System.out.println("-------------------------------");
     }
 }
