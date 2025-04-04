@@ -2,6 +2,7 @@ package org.example.adapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 public class Adapter {
 
@@ -13,6 +14,6 @@ public class Adapter {
         adapter.writeStringsToOutputStream(strings);
 
         System.out.println(adapter.getStringFromOutputStream());
-        //System.out.println(adapter.getOutputStream());
+        System.out.println(Arrays.toString(((ByteArrayOutputStream) adapter.getOutputStream()).toByteArray()));
     }
 }
