@@ -4,10 +4,12 @@ import lombok.experimental.UtilityClass;
 import org.example.factory.Transport;
 import org.example.factory.TransportFactory;
 import org.example.exception.DuplicateModelNameException;
+import org.example.factory.service.impl.Car;
 import org.example.factory.service.impl.CarFactory;
 import org.example.factory.service.impl.SynchronizedTransport;
 
 import static org.example.constant.ExceptionMessageConst.EMPTY_NAME;
+import static org.example.constant.PatternsConst.INIT_MODEL_COUNT;
 
 @UtilityClass
 public class TransportUtility {
@@ -67,6 +69,12 @@ public class TransportUtility {
 
     public static Transport synchronizedVehicle(Transport t) {
         return new SynchronizedTransport(t);
+    }
+
+    public static void initModel(Transport transport) throws DuplicateModelNameException {
+        for (int i = 0; i < transport.getSize(); i++) {
+            transport.addModel(transport.getClass().getSimpleName() + " " + (i + 1), (i + 1) * 10);
+        }
     }
 }
 

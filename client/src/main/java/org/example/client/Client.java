@@ -1,4 +1,4 @@
-package org.client;
+package org.example.client;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
