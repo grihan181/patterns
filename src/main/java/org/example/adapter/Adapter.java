@@ -13,5 +13,6 @@ public class Adapter {
         adapter.writeStringsToOutputStream(strings);
 
         System.out.println(adapter.getStringFromOutputStream());
+        //System.out.println(adapter.getOutputStream());
     }
 }

@@ -23,7 +23,7 @@ public class FacadeApp {
 
         JFrame frame = new JFrame("Car and Traffic Light");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 500);
+        frame.setSize(2560, 1600);
 
         JPanel drawingPanel = new JPanel() {
             @Override

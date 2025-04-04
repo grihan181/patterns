@@ -13,8 +13,8 @@ public class TrafficFacade {
 
     public TrafficFacade(JPanel drawingPanel) throws ImageNotFoundException {
         this.drawingPanel = drawingPanel;
-        this.car = new Car(0, 150, drawingPanel);
-        this.trafficLight = new TrafficLight(1000, 70, drawingPanel);
+        this.car = new Car(0, 350, drawingPanel);
+        this.trafficLight = new TrafficLight(1200, 250, drawingPanel);
     }
 
     public void drawObjects(Graphics g) {
