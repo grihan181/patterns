@@ -12,4 +12,5 @@ public class ExceptionMessageConst {
     public static final String EMPTY_NAME = "The model name cannot be empty";
     public static final String MODEL_NAME_NOT_FOUND = "The model named {0} does not exist";
     public static final String IMAGE_NOT_FOUND = "The image does not exist";
+    public static final String CAR_NOT_FOUND = "The car does not exist";
 }

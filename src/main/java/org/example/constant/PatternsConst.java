@@ -11,4 +11,5 @@ public class PatternsConst {
     public static String SPACE = " ";
     public static int COUNT_MODEL = 3;
     public static String PRINTER_DIRECTORY = "print/";
+    public static String PRINT_ROW_PATTERN = "%s: $%d | ";
 }
