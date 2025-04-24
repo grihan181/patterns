@@ -8,11 +8,13 @@ import org.example.exception.ModelPriceOutOfBoundsException;
 import org.example.exception.NoSuchModelNameException;
 import org.example.lr3.visitor.Visitor;
 
+import java.io.*;
+
 import static org.example.constant.ExceptionMessageConst.NEGATIVE_COUNT_MODEL;
 import static org.example.lr1.factory.util.TransportUtility.validateName;
 
 @Data
-public class Motorcycle implements Transport {
+public class Motorcycle implements Transport, Serializable {
 
     private static final String HEAD = "Head";
 
@@ -172,6 +174,41 @@ public class Motorcycle implements Transport {
         throw new NoSuchModelNameException("");
     }
 
+    public void serialize(String filename) throws IOException {
+        try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
+            out.println(brand);
+            out.println(size);
+            Model current = head.next;
+            while (current != head) {
+                out.println(current.getName());
+                out.println(current.getPrice());
+                current = current.next;
+            }
+        }
+    }
+
+    public static Motorcycle deserialize(String filename) throws IOException, DuplicateModelNameException {
+        try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
+            String brand = in.readLine();
+            int size = Integer.parseInt(in.readLine());
+            Motorcycle motorcycle = new Motorcycle(brand, size);
+            motorcycle.head = motorcycle.new Model("Head", 0);
+            motorcycle.head.prev = motorcycle.head;
+            motorcycle.head.next = motorcycle.head;
+            motorcycle.size = 0;
+
+            for (int i = 0; i < size; i++) {
+                String modelName = in.readLine();
+                int modelPrice = Integer.parseInt(in.readLine());
+                motorcycle.addModel(modelName, modelPrice);
+            }
+
+            return motorcycle;
+        } catch (ModelPriceOutOfBoundsException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public Motorcycle clone() throws CloneNotSupportedException {
         Motorcycle motorcycleClone = (Motorcycle) super.clone();
@@ -199,7 +236,7 @@ public class Motorcycle implements Transport {
 
     @Data
     @NoArgsConstructor
-    public static class Model implements Cloneable {
+    public class Model implements Cloneable, Serializable {
 
         private String name;
         private int price;
@@ -226,7 +263,7 @@ public class Motorcycle implements Transport {
             this.next = null;
         }
 
-        public void setPrice(int price) throws ModelPriceOutOfBoundsException{
+        public void setPrice(int price) throws ModelPriceOutOfBoundsException {
             if (price < 0) {
                 throw new ModelPriceOutOfBoundsException(price);
             }

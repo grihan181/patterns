@@ -173,6 +173,31 @@ public class Car implements Transport, Iterable<Car.Model>, Serializable {
         this.printer.print(this, out);
     }
 
+    public void serialize(String filename) throws IOException {
+        try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
+            out.println(brand);
+            out.println(models.length);
+            for (Model model : models) {
+                out.println(model.getName());
+                out.println(model.getPrice());
+            }
+        }
+    }
+
+    public static Car deserialize(String filename) throws IOException, DuplicateModelNameException {
+        try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
+            String brand = in.readLine();
+            int modelCount = Integer.parseInt(in.readLine());
+            Car car = new Car(brand, modelCount);
+            for (int i = 0; i < modelCount; i++) {
+                String modelName = in.readLine();
+                int modelPrice = Integer.parseInt(in.readLine());
+                car.models[i] = car.new Model(modelName, modelPrice);
+            }
+            return car;
+        }
+    }
+
     @Override
     public Iterator<Model> iterator() {
         return new AutoIterator();
@@ -185,7 +210,7 @@ public class Car implements Transport, Iterable<Car.Model>, Serializable {
 
     @Data
     @AllArgsConstructor
-    static class Model implements Cloneable, Serializable {
+    class Model implements Cloneable, Serializable {
         private String name;
         private int price;
 

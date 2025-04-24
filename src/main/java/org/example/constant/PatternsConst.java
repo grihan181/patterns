@@ -12,4 +12,9 @@ public class PatternsConst {
     public static int COUNT_MODEL = 3;
     public static String PRINTER_DIRECTORY = "print/";
     public static String PRINT_ROW_PATTERN = "%s: $%d | ";
+    public static String PRINT_TRANSPORT = "%s: size = %s";
+
+    public static String CAR_CLASS_NAME = "org.example.lr1.factory.service.impl.Motorcycle";
+    public static String MOTORCYCLE = "Motorcycle";
+
 }
