@@ -17,10 +17,10 @@ public class TextVehicleDAO implements TransportDAO {
 
             Transport vehicle;
 
-            if (type.equals("factory.Car")) {
-                vehicle = new Car(brand, 0);
+            if (type.equals("org.example.factory.Car")) {
+                vehicle = new Car(brand, size);
             } else {
-                vehicle = new Motorcycle(brand, 0);
+                vehicle = new Motorcycle(brand, size);
             }
 
             for (int i = 0; i < size; i++) {

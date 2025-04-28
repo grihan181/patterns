@@ -2,6 +2,7 @@ package org.example.factory;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.example.factory.exception.DuplicateModelNameException;
 import org.example.factory.exception.ModelPriceOutOfBoundsException;
 import org.example.factory.exception.NoSuchModelNameException;
@@ -26,6 +27,7 @@ public class Motorcycle implements Transport, Serializable {
         this.size = 0;
 
         for (int i = 0; i < size; i++) {
+            ++this.size;
             addModel(null, 0);
         }
     }
@@ -76,7 +78,6 @@ public class Motorcycle implements Transport, Serializable {
             throw new DuplicateModelNameException(name);
         }
 
-        ++size;
         if (head.prev.name == null && name != null) {
             Model cModel = head.next;
             while (!cModel.equals(head)) {
@@ -94,6 +95,9 @@ public class Motorcycle implements Transport, Serializable {
             Model lastModel = getLastModel();
             newModel.prev = lastModel;
             lastModel.next = newModel;
+            if(name != null) {
+                ++this.size;
+            }
         } catch (NoSuchModelNameException e) {
             newModel.prev = head;
             head.next = newModel;
@@ -186,7 +190,9 @@ public class Motorcycle implements Transport, Serializable {
     public static class Model implements Cloneable, Serializable {
         private String name;
         private int price;
+        @ToString.Exclude
         private Model prev;
+        @ToString.Exclude
         private Model next;
 
         @Override

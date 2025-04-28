@@ -34,7 +34,7 @@ public class DaoTest {
         System.out.println(car + " / " + textLoadedCar + " / " + serializedLoadedCar);
         FactoryMethod.delimeter();
 
-        Motorcycle motorcycle = new Motorcycle("Test motor brand", 4);
+        Motorcycle motorcycle = new Motorcycle("Test motor brand", initialModelsCount);
         for (int i = 0; i < initialModelsCount; i++) {
             try {
                 motorcycle.addModel("Motorcycle " + (i + 1), (i + 1) * 10);
